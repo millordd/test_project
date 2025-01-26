@@ -1,0 +1,48 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "useDefineForClassFields": true,
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "pretty": true,
+    "types": ["vite-plugin-svgr/client"],
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "importHelpers": true,
+    "allowSyntheticDefaultImports": true,
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+
+    /* Linting */
+		"strict": true,
+		/* strict mode enables the following rules: */
+		"alwaysStrict": true,
+		"noImplicitAny": true,
+		"strictNullChecks": true,
+		"strictPropertyInitialization": true,
+		"strictFunctionTypes": true,
+		"noImplicitThis": true,
+		"strictBindCallApply": true,
+
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noErrorTruncation": false,
+
+    "baseUrl": "./src",
+    "paths": {
+    "@app/*": ["./app/*"],
+    "@pages/*": ["app/pages/*"],
+    "@components/*": ["./components/*"],
+    "@shared/*": ["./shared/*"],
+    "@hooks/*": ["./hooks/*"],
+}
+
+  },
+  "include": ["src", "tailwind.config.js", "vite.config.mjs", ".eslintrc.cjs","postcss.config.js","commitlint.config.cjs"],
+  "exclude": ["node_modules", "**/dist"],
+}
