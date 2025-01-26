@@ -12,7 +12,7 @@ export const DashboardLayout = () => {
             <Sidebar />
           </div>
 
-          <div className="flex-1 h-full overflow-y-auto bg-[#F3F5F8] dark:bg-dark-mode-base">
+          <div className="flex-1 p-5 h-full overflow-y-auto bg-[#F1F1F1]">
             <Outlet />
           </div>
         </div>

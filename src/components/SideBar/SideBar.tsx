@@ -33,7 +33,7 @@ export const Sidebar = () => {
     if (path === '/dashboard') {
       return '1';
     }
-    if (path === '/map') {
+    if (path === '/dashboard/messages') {
       return '2';
     }
     return '1';
