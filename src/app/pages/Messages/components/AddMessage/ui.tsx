@@ -1,11 +1,12 @@
 import { Button, Flex, Form, Input, Modal, Select } from 'antd';
+import { FC } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
 import { useCreateMessageQuery } from './api';
 import { AddMessagesProps, IMessagePayload } from './types';
 
-export const AddMessages: React.FC<AddMessagesProps> = ({ isModalOpen, handleCancel }) => {
+export const AddMessages: FC<AddMessagesProps> = ({ isModalOpen, handleCancel }) => {
   const {
     control,
     handleSubmit,
@@ -87,7 +88,6 @@ export const AddMessages: React.FC<AddMessagesProps> = ({ isModalOpen, handleCan
           />
         </Form.Item>
 
-        {/* Form Buttons */}
         <Form.Item>
           <Flex justify="end" align="end" gap={10}>
             <Button onClick={handleCancel}>Cancel</Button>
