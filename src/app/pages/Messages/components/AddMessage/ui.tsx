@@ -1,21 +1,15 @@
-import { Button, Form, Input, Modal, Select } from 'antd';
+import { Button, Flex, Form, Input, Modal, Select } from 'antd';
 import { Controller, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
 import { useCreateMessageQuery } from './api';
-import { IMessagePayload } from './types';
+import { AddMessagesProps, IMessagePayload } from './types';
 
-interface AddMessagesProps {
-  isModalOpen: boolean;
-  handleOk: () => void;
-  handleCancel: () => void;
-}
-const { Option } = Select;
-
-export const AddMessages: React.FC<AddMessagesProps> = ({ isModalOpen, handleOk, handleCancel }) => {
+export const AddMessages: React.FC<AddMessagesProps> = ({ isModalOpen, handleCancel }) => {
   const {
     control,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<IMessagePayload>();
   const { mutateAsync, isPending } = useCreateMessageQuery();
@@ -24,13 +18,15 @@ export const AddMessages: React.FC<AddMessagesProps> = ({ isModalOpen, handleOk,
     mutateAsync(payload, {
       onSuccess: () => {
         toast.success('Сообщение успешно создано');
-        handleOk();
+        handleCancel();
+        reset();
       },
     });
   };
   return (
-    <Modal title="Add Mesage" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+    <Modal title="Add Message" open={isModalOpen} onCancel={handleCancel} footer={null}>
       <Form layout="vertical" onFinish={handleSubmit(onSubmit)}>
+        {/* Organization ID */}
         <Form.Item
           label="Organization ID"
           validateStatus={errors.organizationId ? 'error' : ''}
@@ -44,6 +40,7 @@ export const AddMessages: React.FC<AddMessagesProps> = ({ isModalOpen, handleOk,
           />
         </Form.Item>
 
+        {/* Message Type */}
         <Form.Item
           label="Message Type"
           validateStatus={errors.messageType ? 'error' : ''}
@@ -55,13 +52,14 @@ export const AddMessages: React.FC<AddMessagesProps> = ({ isModalOpen, handleOk,
             rules={{ required: 'Message Type is required' }}
             render={({ field }) => (
               <Select {...field} placeholder="Select Message Type">
-                <Option value={1}>Type 1</Option>
-                <Option value={2}>Type 2</Option>
+                <Select.Option value={1}>Type 1</Select.Option>
+                <Select.Option value={2}>Type 2</Select.Option>
               </Select>
             )}
           />
         </Form.Item>
 
+        {/* Recipient Email */}
         <Form.Item
           label="Recipient Email"
           validateStatus={errors.recipient ? 'error' : ''}
@@ -70,14 +68,12 @@ export const AddMessages: React.FC<AddMessagesProps> = ({ isModalOpen, handleOk,
           <Controller
             name="recipient"
             control={control}
-            defaultValue=""
-            rules={{
-              required: 'Recipient email is required',
-            }}
+            rules={{ required: 'Recipient email is required' }}
             render={({ field }) => <Input {...field} placeholder="Enter Recipient Email" />}
           />
         </Form.Item>
 
+        {/* Content */}
         <Form.Item
           label="Content"
           validateStatus={errors.content ? 'error' : ''}
@@ -86,16 +82,19 @@ export const AddMessages: React.FC<AddMessagesProps> = ({ isModalOpen, handleOk,
           <Controller
             name="content"
             control={control}
-            defaultValue=""
             rules={{ required: 'Content is required' }}
             render={({ field }) => <Input.TextArea {...field} placeholder="Enter Message Content" rows={4} />}
           />
         </Form.Item>
 
+        {/* Form Buttons */}
         <Form.Item>
-          <Button type="primary" htmlType="submit" loading={isPending}>
-            Send Message
-          </Button>
+          <Flex justify="end" align="end" gap={10}>
+            <Button onClick={handleCancel}>Cancel</Button>
+            <Button type="primary" htmlType="submit" loading={isPending}>
+              Submit
+            </Button>
+          </Flex>
         </Form.Item>
       </Form>
     </Modal>

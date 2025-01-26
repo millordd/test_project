@@ -4,23 +4,35 @@ import { CSSProperties } from 'styled-components';
 
 import { MoreIcon } from '@shared/assets/icones';
 
-import { AddMessages } from './components';
+import { AddMessages, AddSeveralMessage } from './components';
 import { TableMessage } from './components/Table';
 
 export const Messages = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const showModal = () => {
-    setIsModalOpen(true);
+  const [modalState, setModalState] = useState({
+    addOne: false,
+    edit: false,
+    remove: false,
+    addSeveral: false,
+  });
+  const handleToggle = (type: 'addOne' | 'addSeveral' | 'edit' | 'remove') => {
+    setModalState((prev) => ({
+      ...prev,
+      [type]: !prev[type],
+    }));
   };
+  // const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
+  // const showModal = () => {
+  //   setIsModalOpen(true);
+  // };
 
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
+  // const handleOk = () => {
+  //   setIsModalOpen(false);
+  // };
+
+  // const handleCancel = () => {
+  //   setIsModalOpen(false);
+  // };
   const getItems: (panelStyle: CSSProperties) => CollapseProps['items'] = (panelStyle) => [
     {
       key: '1',
@@ -55,13 +67,19 @@ export const Messages = () => {
 
   return (
     <>
-      <AddMessages isModalOpen={isModalOpen} handleOk={handleOk} handleCancel={handleCancel} />
+      <AddSeveralMessage isModalOpen={modalState.addSeveral} handleCancel={() => handleToggle('addSeveral')} />
+      <AddMessages isModalOpen={modalState.addOne} handleCancel={() => handleToggle('addOne')} />
       <div className="h-screen bg-white p-2">
         <Flex align="center" justify="space-between">
           <Typography.Title level={2}>Messages</Typography.Title>
-          <Button type="primary" onClick={showModal}>
-            Добавить
-          </Button>
+          <div>
+            <Button type="primary" size="large" className="mr-2" onClick={() => handleToggle('addSeveral')}>
+              Добавить несколько
+            </Button>
+            <Button type="primary" size="large" onClick={() => handleToggle('addOne')}>
+              Добавить
+            </Button>
+          </div>
         </Flex>
         <Collapse expandIconPosition="right" size="large" items={getItems(panelStyle)} />
         <Space direction="vertical" />
