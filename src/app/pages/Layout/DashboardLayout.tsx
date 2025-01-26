@@ -6,11 +6,8 @@ import { AuthProvider } from '@shared/utils/AuthProvider';
 export const DashboardLayout = () => {
   return (
     <>
-      {/* Fixed Header */}
-
       <AuthProvider>
         <div className="flex flex-row overflow-hidden">
-          {/* Static Sidebar */}
           <div className="overflow-hidden">
             <Sidebar />
           </div>
