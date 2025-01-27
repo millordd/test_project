@@ -1,4 +1,4 @@
-import { Button, Collapse, CollapseProps, Flex, Modal, Space, Table, theme, Typography } from 'antd';
+import { Button, Collapse, CollapseProps, Flex, Space, theme, Typography } from 'antd';
 import { useState } from 'react';
 import { CSSProperties } from 'styled-components';
 
@@ -20,19 +20,7 @@ export const Messages = () => {
       [type]: !prev[type],
     }));
   };
-  // const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // const showModal = () => {
-  //   setIsModalOpen(true);
-  // };
-
-  // const handleOk = () => {
-  //   setIsModalOpen(false);
-  // };
-
-  // const handleCancel = () => {
-  //   setIsModalOpen(false);
-  // };
   const getItems: (panelStyle: CSSProperties) => CollapseProps['items'] = (panelStyle) => [
     {
       key: '1',
