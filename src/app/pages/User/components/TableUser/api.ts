@@ -36,4 +36,5 @@ export const useGetUsersQuery = (payload: IGetUsersPayload) =>
   useQuery({
     queryKey: ['getUsers', payload],
     queryFn: () => getUser(payload),
+    retry: false,
   });

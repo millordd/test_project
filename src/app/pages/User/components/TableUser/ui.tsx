@@ -1,13 +1,13 @@
 import type { TableProps } from 'antd';
 import { Form, Input, Popconfirm, Table, Typography } from 'antd';
-import { FC, useState } from 'react';
+import { FC, HTMLAttributes, PropsWithChildren, useState } from 'react';
 import toast from 'react-hot-toast';
 import { queryClient } from 'utils/reactQuery';
 
 import { useGetUsersQuery, useUpdateUserQuery } from './api';
 import { IEditUserPayload, ITableUserProps, IUser } from './types';
 
-interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
+interface EditableCellProps extends HTMLAttributes<HTMLElement> {
   editing: boolean;
   dataIndex: string;
   title: any;
@@ -16,7 +16,7 @@ interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
   index: number;
 }
 
-const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
+const EditableCell: React.FC<PropsWithChildren<EditableCellProps>> = ({
   editing,
   dataIndex,
   title,
@@ -45,8 +45,8 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
   );
 };
 
-export const TableUser: FC<ITableUserProps> = ({ payload }) => {
-  const { data } = useGetUsersQuery(payload);
+export const TableUser: FC<ITableUserProps> = ({ params, pagination, setPagination }) => {
+  const { data } = useGetUsersQuery(params);
   const [form] = Form.useForm();
   const [editingKey, setEditingKey] = useState('');
   const [editingUser, setEditingUser] = useState<Partial<IUser> | null>(null);
@@ -59,7 +59,12 @@ export const TableUser: FC<ITableUserProps> = ({ payload }) => {
     setEditingKey(record.id.toString());
     setEditingUser(record);
   };
-
+  const handleTableChange = (pagination: any) => {
+    setPagination({
+      current: pagination.current,
+      pageSize: pagination.pageSize,
+    });
+  };
   const cancel = () => {
     setEditingKey('');
     setEditingUser(null);
@@ -157,7 +162,12 @@ export const TableUser: FC<ITableUserProps> = ({ payload }) => {
         dataSource={data?.items || []}
         columns={mergedColumns}
         rowClassName="editable-row"
-        pagination={{ pageSize: data?.total, onChange: cancel }}
+        pagination={{
+          current: pagination.current,
+          pageSize: pagination.pageSize,
+          total: data?.total || 0, // Total items from backend
+        }}
+        onChange={handleTableChange}
       />
     </Form>
   );

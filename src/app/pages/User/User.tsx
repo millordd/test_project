@@ -4,7 +4,8 @@ import { CSSProperties } from 'styled-components';
 
 import { MoreIcon } from '@shared/assets/icones';
 
-import { AddUser, TableUser } from './components';
+import { AddUser, Filter, TableUser } from './components';
+import { IGetUsersPayload } from './components/TableUser/types';
 
 export const User = () => {
   const [modalState, setModalState] = useState({
@@ -12,26 +13,28 @@ export const User = () => {
     edit: false,
     remove: false,
   });
+  const [pagination, setPagination] = useState({
+    current: 1,
+    pageSize: 10,
+  });
+
+  const [queryParams, setQueryParams] = useState<IGetUsersPayload>({
+    filters: { userName: '', email: '', phoneNumber: '' },
+    orderBy: { orderColumn: 1, direction: 0 },
+    pageInfo: { pageNumber: pagination.current, pageSize: pagination.pageSize },
+  });
+
   const handleToggle = (type: 'add' | 'edit' | 'remove') => {
     setModalState((prev) => ({
       ...prev,
       [type]: !prev[type],
     }));
   };
-
-  const paylaod = {
-    filters: {
-      userName: '',
-      email: '',
-      phoneNumber: '',
-    },
-    orderBy: {
-      orderColumn: 1,
-      direction: 0,
-    },
+  const params = {
+    ...queryParams,
     pageInfo: {
-      pageNumber: 1,
-      pageSize: 10,
+      pageNumber: pagination.current,
+      pageSize: pagination.pageSize,
     },
   };
 
@@ -43,7 +46,7 @@ export const User = () => {
           <MoreIcon /> <span>ПОИСК</span>
         </div>
       ),
-      children: <Typography.Paragraph>text</Typography.Paragraph>,
+      children: <Filter setFilters={setQueryParams} />,
       style: panelStyle,
     },
     {
@@ -53,7 +56,7 @@ export const User = () => {
           <MoreIcon /> <span>Результаты поиска</span>
         </div>
       ),
-      children: <TableUser payload={paylaod} />,
+      children: <TableUser params={params} pagination={pagination} setPagination={setPagination} />,
       style: panelStyle,
     },
   ];
@@ -74,17 +77,18 @@ export const User = () => {
         <Flex align="center" justify="space-between">
           <Typography.Title level={2}>Users</Typography.Title>
           <div>
-            {/* <Button type="primary" size="large" className="mr-2" onClick={() => handleToggle('addSeveral')}>
-              Добавить несколько
-            </Button> */}
             <Button type="primary" size="large" onClick={() => handleToggle('add')}>
               Добавить User
             </Button>
           </div>
         </Flex>
-        {/* <div className="max-h-screen overflow-y-auto"> */}
-        <Collapse expandIconPosition="right" size="large" className="max-h-[80vh]" items={getItems(panelStyle)} />
-        {/* </div> */}
+        <Collapse
+          defaultActiveKey={['2']}
+          expandIconPosition="right"
+          size="large"
+          className="max-h-[80vh]"
+          items={getItems(panelStyle)}
+        />
       </div>
     </>
   );
