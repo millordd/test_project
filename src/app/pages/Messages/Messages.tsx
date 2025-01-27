@@ -4,22 +4,34 @@ import { CSSProperties } from 'styled-components';
 
 import { MoreIcon } from '@shared/assets/icones';
 
-import { AddMessages, AddSeveralMessage } from './components';
-import { TableMessage } from './components/Table';
+import { AddMessages, AddSeveralMessage, MessageFilter } from './components';
+import { TableMessage } from './components/TableMessage';
 
 export const Messages = () => {
   const [modalState, setModalState] = useState({
     addOne: false,
-    edit: false,
-    remove: false,
     addSeveral: false,
   });
-  const handleToggle = (type: 'addOne' | 'addSeveral' | 'edit' | 'remove') => {
+  const handleToggle = (type: 'addOne' | 'addSeveral') => {
     setModalState((prev) => ({
       ...prev,
       [type]: !prev[type],
     }));
   };
+  const [filters, setFilters] = useState({
+    filters: {
+      recipient: '',
+      sentAt: new Date().toISOString(),
+      startDate: null,
+      endDate: null,
+    },
+    orderBy: {
+      orderColumn: 1,
+      direction: 0,
+    },
+  });
+
+  // console.log(filters);
 
   const getItems: (panelStyle: CSSProperties) => CollapseProps['items'] = (panelStyle) => [
     {
@@ -29,7 +41,7 @@ export const Messages = () => {
           <MoreIcon /> <span>ПОИСК</span>
         </div>
       ),
-      children: <Typography.Paragraph>text</Typography.Paragraph>,
+      children: <MessageFilter setFilterData={setFilters} />,
       style: panelStyle,
     },
     {
@@ -39,14 +51,14 @@ export const Messages = () => {
           <MoreIcon /> <span>Результаты поиска</span>
         </div>
       ),
-      children: <TableMessage />,
+      children: <TableMessage params={filters} />,
       style: panelStyle,
     },
   ];
 
   const { token } = theme.useToken();
 
-  const panelStyle: React.CSSProperties = {
+  const panelStyle: CSSProperties = {
     marginBottom: 24,
     background: token.colorFillAlter,
     borderRadius: token.borderRadiusLG,
@@ -57,7 +69,7 @@ export const Messages = () => {
     <>
       <AddSeveralMessage isModalOpen={modalState.addSeveral} handleCancel={() => handleToggle('addSeveral')} />
       <AddMessages isModalOpen={modalState.addOne} handleCancel={() => handleToggle('addOne')} />
-      <div className="h-screen bg-white p-2">
+      <div className="h-[85vh] bg-white p-2">
         <Flex align="center" justify="space-between">
           <Typography.Title level={2}>Messages</Typography.Title>
           <div>
@@ -69,7 +81,13 @@ export const Messages = () => {
             </Button>
           </div>
         </Flex>
-        <Collapse expandIconPosition="right" size="large" items={getItems(panelStyle)} />
+        <Collapse
+          expandIconPosition="right"
+          size="large"
+          items={getItems(panelStyle)}
+          defaultActiveKey={['2']}
+          className="max-h-[80vh]"
+        />
         <Space direction="vertical" />
       </div>
     </>

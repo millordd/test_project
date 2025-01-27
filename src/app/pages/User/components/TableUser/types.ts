@@ -22,11 +22,6 @@ export interface IGetUsersPayload {
 
 export interface ITableUserProps {
   params: IGetUsersPayload;
-  pagination: {
-    current: number;
-    pageSize: number;
-  };
-  setPagination: (pagination: { current: number; pageSize: number }) => void;
 }
 
 export interface IUser {

@@ -13,15 +13,11 @@ export const User = () => {
     edit: false,
     remove: false,
   });
-  const [pagination, setPagination] = useState({
-    current: 1,
-    pageSize: 10,
-  });
 
   const [queryParams, setQueryParams] = useState<IGetUsersPayload>({
     filters: { userName: '', email: '', phoneNumber: '' },
     orderBy: { orderColumn: 1, direction: 0 },
-    pageInfo: { pageNumber: pagination.current, pageSize: pagination.pageSize },
+    pageInfo: { pageNumber: 1, pageSize: 10 },
   });
 
   const handleToggle = (type: 'add' | 'edit' | 'remove') => {
@@ -29,13 +25,6 @@ export const User = () => {
       ...prev,
       [type]: !prev[type],
     }));
-  };
-  const params = {
-    ...queryParams,
-    pageInfo: {
-      pageNumber: pagination.current,
-      pageSize: pagination.pageSize,
-    },
   };
 
   const getItems: (panelStyle: CSSProperties) => CollapseProps['items'] = (panelStyle) => [
@@ -56,14 +45,14 @@ export const User = () => {
           <MoreIcon /> <span>Результаты поиска</span>
         </div>
       ),
-      children: <TableUser params={params} pagination={pagination} setPagination={setPagination} />,
+      children: <TableUser params={queryParams} />,
       style: panelStyle,
     },
   ];
 
   const { token } = theme.useToken();
 
-  const panelStyle: React.CSSProperties = {
+  const panelStyle: CSSProperties = {
     marginBottom: 24,
     background: token.colorFillAlter,
     borderRadius: token.borderRadiusLG,
