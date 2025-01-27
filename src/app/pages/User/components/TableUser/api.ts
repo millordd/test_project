@@ -1,9 +1,9 @@
 import { request } from 'utils/axios';
 
 import { ENDPOINTS } from '@shared/api/endpoints';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
-import { IGetUsersPayload, IUserList } from './types';
+import { IEditUserPayload, IGetUsersPayload, IUserList } from './types';
 
 const getUser = async (payload: IGetUsersPayload): Promise<IUserList> => {
   try {
@@ -16,8 +16,24 @@ const getUser = async (payload: IGetUsersPayload): Promise<IUserList> => {
   }
 };
 
+const updateUser = async (payload: IEditUserPayload) => {
+  try {
+    const { data } = await request.post(ENDPOINTS.UPDATE_USER, payload);
+    return data;
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    throw new Error(error.response.data.meta.message);
+  }
+};
+
+export const useUpdateUserQuery = () =>
+  useMutation({
+    mutationFn: (data: IEditUserPayload) => updateUser(data),
+  });
+
 export const useGetUsersQuery = (payload: IGetUsersPayload) =>
   useQuery({
-    queryKey: ['getAllCompany', payload],
+    queryKey: ['getUsers', payload],
     queryFn: () => getUser(payload),
   });

@@ -24,12 +24,17 @@ export interface ITableUserProps {
   payload: IGetUsersPayload;
 }
 
-interface IUser {
+export interface IUser {
   id: number;
   organizationId: number;
   userName: string;
   email: string;
   phoneNumber: string;
+}
+export interface IEditUserPayload extends IFilters {
+  id: number;
+  updatedAt: string;
+  timestamp: string;
 }
 
 export interface IUserList {

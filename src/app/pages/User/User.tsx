@@ -1,4 +1,4 @@
-import { Button, Collapse, CollapseProps, Flex, Space, theme, Typography } from 'antd';
+import { Button, Collapse, CollapseProps, Flex, theme, Typography } from 'antd';
 import { useState } from 'react';
 import { CSSProperties } from 'styled-components';
 

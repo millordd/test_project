@@ -2,6 +2,7 @@ import { Button, Flex, Form, Input, Modal } from 'antd';
 import { FC } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
+import { queryClient } from 'utils/reactQuery';
 
 import { useCreateUserQuery } from './api';
 import { IAddUserPayload, IAddUserProps } from './types';
@@ -19,6 +20,7 @@ export const AddUser: FC<IAddUserProps> = ({ isModalOpen, handleCancel }) => {
     mutateAsync(payload, {
       onSuccess: () => {
         toast.success('Пользватель успешно создано');
+        queryClient.invalidateQueries({ queryKey: ['getUsers'] });
         handleCancel();
         reset();
       },
